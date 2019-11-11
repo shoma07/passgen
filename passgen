@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+require 'optparse'
+option = { number: true, lower: true, upper: true, symbol: false, list: 1 }
+opt = OptionParser.new
+opt.on("-n", "--[no-]number", TrueClass) { |b| option[:number] = b }
+opt.on("-l", "--[no-]lower", TrueClass) { |b| option[:lower] = b }
+opt.on("-u","--[no-]upper", TrueClass) { |b| option[:upper] = b }
+opt.on("-s", "--[no-]symbol", TrueClass) { |b| option[:symbol] = b }
+opt.on("--list=NUM", Integer) { |i| option[:list] = i }
+opt.parse!(ARGV)
+length = (ARGV.shift || 16).to_i
+chars = []
+chars += ('0'..'9').to_a if option[:number]
+chars += ('a'..'z').to_a if option[:lower]
+chars += ('A'..'Z').to_a if option[:upper]
+chars += ('!'..'?').to_a - ('0'..'9').to_a if option[:symbol]
+option[:list].times { puts Array.new(length) { chars[rand(chars.length)] }.join }
